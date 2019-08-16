@@ -12,13 +12,11 @@ import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.rowMapper.StockInfoMapper;
 
 /**
- * @ClassName: StockInfoDao
- * @Description: TODO:
- * @author Robin
- * @date 2019年8月15日
+ * 
+ * @author 	ai12345
+ * TODO		底层操作数据库商品库存表
  *
  */
-
 public class StockInfoDao {
 	private static ILog logger = LoggerFactory.getLogger(StockInfoDao.class);
 
@@ -45,13 +43,12 @@ public class StockInfoDao {
 	}
 
 	/**
-	 * 根据商品编号查询商品
-	 * 
-	 * @param itemCode
-	 * @return
+	 * 根据商品编号获取库存信息
+	 * @param itemCode		商品代码
+	 * @return				对应商品的库存信息
 	 * @throws SQLException
 	 */
-	public static Stock queryBy(String itemCode) throws SQLException {
+	public static Stock queryByItemCode(String itemCode) throws SQLException {
 		String sql = "select item_code,qty from  bigtraining.stock where item_code = ?";
 
 		return jdbcTemplate.queryForObj(sql, new StockInfoMapper(), itemCode);
@@ -59,14 +56,14 @@ public class StockInfoDao {
 
 	/**
 	 * 根据商品编号更新库存
-	 * 
-	 * @param itemCode
-	 * @return
+	 * @param itemCode		商品代码
+	 * @param decNum		减少的数值
+	 * @return				当前操作影响的行数
 	 * @throws SQLException
 	 */
-	public static int updateStock(String itemCode, Integer num) throws SQLException {
+	public static int updateStock(String itemCode, Integer decNum) throws SQLException {
 		String sql = "update bigtraining.stock set qty = qty - ?  where item_code = ?";
-		return jdbcTemplate.update(sql, num, itemCode);
+		return jdbcTemplate.update(sql, decNum, itemCode);
 	}
 
 	/**
@@ -84,13 +81,11 @@ public class StockInfoDao {
 	/**
 	 * 查询所有有库存的商品
 	 * 
-	 * @return
+	 * @return				未售完商品库存列表
 	 * @throws SQLException
 	 */
-	public static List<Stock> queryByPage() throws SQLException {
+	public static List<Stock> queryIFQty() throws SQLException {
 		String sql = "select item_code,qty from  bigtraining.stock where qty > 0 "; 
 		return jdbcTemplate.query(sql, new StockInfoMapper());
-		
-		
 	}
 }
