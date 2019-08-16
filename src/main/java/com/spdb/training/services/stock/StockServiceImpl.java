@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.spdb.training.beans.stock.Stock;
-import com.spdb.training.dao.UserinfoDao;
+import com.spdb.training.dao.StockInfoDao;
 import com.spdb.training.exception.ExceptionHandle;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
@@ -22,24 +22,54 @@ public class StockServiceImpl implements StockService{
 	
 	@Override
 	public Stock queryStockByItemCode(String itemCode) {
-//		try {
-//			return
-//		} catch (SQLException e) {
-//			ExceptionHandle.handle(e);
-//		}
-		return null;
+		Stock stock = null;
+		try {
+			stock = StockInfoDao.queryBy(itemCode);
+			logger.info("根据商品代码查询商品库存成功！");
+			return stock;
+		} catch (SQLException e) {
+			ExceptionHandle.handle(e);
+		}
+		return stock;
 	}
 
 	@Override
 	public List<Stock> queryStockHaveQty() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Stock> stockList = null;
+		try {
+			stockList = StockInfoDao.queryByPage();
+			logger.info("查询有库存的商品成功！"); 
+			return stockList;
+			
+		} catch (SQLException e) {
+			ExceptionHandle.handle(e);
+		}
+		return stockList; 
 	}
+	/**
+	 * @疑问：对返回值：boolean的意义不太确定是什么。
+	 * @方法名：updateStockQtyByItemCode
+	 * @返回值意义说明：true:更新行数>0
+	 *              false:更新行数<=0	 * 
+	 * @author:annliao
+	 * @date:2019年8月16日
+	 */
 
 	@Override
-	public boolean updateStockQtyByItemCode(String itemCode) {
-		// TODO Auto-generated method stub
+	public boolean updateStockQtyByItemCode(String itemCode,int num) {
+		int rowsAffected;
+		try {
+			rowsAffected = StockInfoDao.updateStock(itemCode, num);
+			if (rowsAffected <= 0) {
+				logger.warn("购买更新库存影响0行");
+				return false;
+			}else {
+				logger.info("购买更新库存成功");
+				return true;
+			}
+		} catch (Exception e) {
+			ExceptionHandle.handle(e);
+		}
 		return false;
 	}
-
 }
