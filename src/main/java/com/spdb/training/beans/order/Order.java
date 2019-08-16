@@ -7,6 +7,7 @@ package com.spdb.training.beans.order;
  *
  */
 public class Order {
+	private static final long serialVersionUID = -1017085371735723853L;
 	
 	private String orderId;//订单号码
 	private String itemCode;//商品代码
