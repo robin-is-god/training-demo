@@ -34,7 +34,7 @@ public class OrderInfoDao {
 				orderInfo.getOrderTime(), orderInfo.getOrderUser() };
 		return jdbcTemplate.update(sql, args);
 	}
-
+  
 	public static int deleteById(String id) throws SQLException {
 		String sql = "delete from   bigtraining.order  where id = ?";
 		return jdbcTemplate.update(sql, id);
