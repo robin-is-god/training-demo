@@ -34,12 +34,12 @@ CREATE TABLE bigtraining.stock (
 -- Records of stock
 -- ----------------------------
 INSERT INTO bigtraining.stock VALUES ('00010001', 10000);
-INSERT INTO bigtraining.stock VALUES ('00010010', 10000);
-INSERT INTO bigtraining.stock VALUES ('00010011', 10000);
-INSERT INTO bigtraining.stock VALUES ('00010100', 10000);
-INSERT INTO bigtraining.stock VALUES ('00100001', 10000);
+INSERT INTO bigtraining.stock VALUES ('00010002', 10000);
+INSERT INTO bigtraining.stock VALUES ('00010003', 10000);
+INSERT INTO bigtraining.stock VALUES ('00010004', 10000);
+INSERT INTO bigtraining.stock VALUES ('00100005', 10000);
+INSERT INTO bigtraining.stock VALUES ('00100006', 10000);
+INSERT INTO bigtraining.stock VALUES ('00100007', 10000);
+INSERT INTO bigtraining.stock VALUES ('00100008', 10000);
+INSERT INTO bigtraining.stock VALUES ('00100009', 10000);
 INSERT INTO bigtraining.stock VALUES ('00100010', 10000);
-INSERT INTO bigtraining.stock VALUES ('00100011', 10000);
-INSERT INTO bigtraining.stock VALUES ('00110001', 10000);
-INSERT INTO bigtraining.stock VALUES ('00110010', 10000);
-INSERT INTO bigtraining.stock VALUES ('00110011', 10000);
