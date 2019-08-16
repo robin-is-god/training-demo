@@ -56,10 +56,10 @@ public class StockServiceImpl implements StockService{
 	 */
 
 	@Override
-	public boolean updateStockQtyByItemCode(String itemCode,int num) {
+	public boolean updateStockQtyByItemCode(String itemCode,int decNum) {
 		int rowsAffected;
 		try {
-			rowsAffected = StockInfoDao.updateStock(itemCode, num);
+			rowsAffected = StockInfoDao.updateStock(itemCode, decNum);
 			if (rowsAffected <= 0) {
 				logger.warn("购买更新库存影响0行");
 				return false;
