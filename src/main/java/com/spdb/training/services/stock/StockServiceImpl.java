@@ -24,7 +24,7 @@ public class StockServiceImpl implements StockService{
 	public Stock queryStockByItemCode(String itemCode) {
 		Stock stock = null;
 		try {
-			stock = StockInfoDao.queryBy(itemCode);
+			stock = StockInfoDao.queryByItemCode(itemCode);
 			logger.info("根据商品代码查询商品库存成功！");
 			return stock;
 		} catch (SQLException e) {
@@ -37,7 +37,7 @@ public class StockServiceImpl implements StockService{
 	public List<Stock> queryStockHaveQty() {
 		List<Stock> stockList = null;
 		try {
-			stockList = StockInfoDao.queryByPage();
+			stockList = StockInfoDao.queryIFQty();
 			logger.info("查询有库存的商品成功！"); 
 			return stockList;
 			
