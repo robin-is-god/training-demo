@@ -83,5 +83,8 @@ public class StockInfoDao {
 	public static List<Stock> queryByPage() throws SQLException {
 		String sql = "";
 		return jdbcTemplate.query(sql, new StockInfoMapper());
+		
+		
+		
 	}
 }
