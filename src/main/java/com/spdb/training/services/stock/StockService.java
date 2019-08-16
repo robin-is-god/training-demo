@@ -15,5 +15,5 @@ import com.spdb.training.beans.stock.Stock;
 public interface StockService {
 	Stock queryStockByItemCode(String itemCode);
 	List<Stock>  queryStockHaveQty();
-	boolean updateStockQtyByItemCode(String itemCode);
+	boolean updateStockQtyByItemCode(String itemCode,int num);
 }
