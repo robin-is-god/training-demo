@@ -90,5 +90,7 @@ public class StockInfoDao {
 	public static List<Stock> queryByPage() throws SQLException {
 		String sql = "select item_code,qty from  bigtraining.stock where qty > 0 "; 
 		return jdbcTemplate.query(sql, new StockInfoMapper());
+		
+		
 	}
 }
