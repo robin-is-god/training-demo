@@ -85,9 +85,5 @@ public class StockInfoDao {
 		return jdbcTemplate.query(sql, new StockInfoMapper());
 		
 		
-		
-		
-		
-		
 	}
 }
