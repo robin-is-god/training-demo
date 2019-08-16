@@ -1,9 +1,9 @@
 package com.spdb.training.beans.order;
+
 /**
- * @ClassName:Order
- * @Description: TODO:
- * @author annliao
- * @date 2019年8月16日
+ * 
+ * @author 	ai12345
+ * TODO		订单类，描述订单信息
  *
  */
 public class Order {
@@ -16,10 +16,10 @@ public class Order {
 	private String orderTime;//订单时间
 	private String orderUser;//下单人
 	
-	public String getOrderId() {
+	public String getOrderId() {//获取属性值
 		return orderId;
 	}
-	public void setOrderId(String orderId) {
+	public void setOrderId(String orderId) {//设定属性值
 		this.orderId = orderId;
 	}
 	public String getItemCode() {
@@ -52,7 +52,5 @@ public class Order {
 	public void setOrderUser(String orderUser) {
 		this.orderUser = orderUser;
 	}
-	
-	
 	
 }
