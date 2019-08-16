@@ -73,6 +73,7 @@ public class StockInfoDao {
 	 */
 	public static int deleteStock(String itemCode) throws SQLException {
 		return 0;
+		
 	}
 	
 	/**
