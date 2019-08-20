@@ -33,5 +33,9 @@ public class Stock implements Serializable {
 	public void setQty(Integer qty) {
 		this.qty = qty;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Stock [itemCode=" + itemCode + ", qty=" + qty + "]";
+	}
 }

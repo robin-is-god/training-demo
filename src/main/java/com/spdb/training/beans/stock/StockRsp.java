@@ -3,6 +3,10 @@ package com.spdb.training.beans.stock;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
 /**
 * @ClassName: StockRsp
 * @Description: TODO:
@@ -10,22 +14,21 @@ import java.util.List;
 * @date 2019年8月15日
 *
 */
-
 public class StockRsp implements Serializable {
 	private static final long serialVersionUID = -1017085371735723853L;
 	
-	private int num;
+	private int nums;
 	
 	private List<Stock> row;
-
-	public int getNum() {
-		return num;
+	
+	public int getNums() {
+		return nums;
 	}
 
-	public void setNum(int num) {
-		this.num = num;
+	public void setNums(int nums) {
+		this.nums = nums;
 	}
-
+	
 	public List<Stock> getRow() {
 		return row;
 	}

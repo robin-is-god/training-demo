@@ -85,7 +85,7 @@ public class StockInfoDao {
 	 * @throws SQLException
 	 */
 	public static List<Stock> queryIFQty() throws SQLException {
-		String sql = "select item_code,qty from  bigtraining.stock where qty > 0 "; 
+		String sql = "select item_code, qty from  bigtraining.stock where qty > 0 "; 
 		return jdbcTemplate.query(sql, new StockInfoMapper());
 	}
 }

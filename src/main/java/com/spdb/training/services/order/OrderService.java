@@ -11,6 +11,6 @@ import com.spdb.training.beans.order.Order;
  */
 public interface OrderService {
 	//购买增加一条记录
-	void insert(Order order);
+	boolean insert(Order order);
 	
 }

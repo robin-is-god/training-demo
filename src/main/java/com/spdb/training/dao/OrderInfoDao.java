@@ -10,6 +10,7 @@ import com.spdb.training.jdbc.core.JdbcTemplate;
 import com.spdb.training.jdbc.core.JdbcTemplateFactory;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
+import com.spdb.training.rowMapper.OrderInfoMapper;
 import com.spdb.training.rowMapper.StockInfoMapper;
 
 /**
@@ -57,9 +58,9 @@ public class OrderInfoDao {
 	 * @return				已售商品统计信息表（结构和Stock类属性一致）
 	 * @throws SQLException
 	 */
-	public static List<Stock> queryTotalQtyByItemCode() throws SQLException {
+	public static List<Order> queryTotalQtyByItemCode() throws SQLException {
 		String sql = "select Item_code,SUM(order_qty)  from  bigtraining.order group by Item_code";
-		return jdbcTemplate.query(sql, new StockInfoMapper());
+		return jdbcTemplate.query(sql, new OrderInfoMapper());
 
 	}
 }

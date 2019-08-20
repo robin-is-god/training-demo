@@ -38,9 +38,8 @@ public class StockServiceImpl implements StockService{
 		List<Stock> stockList = null;
 		try {
 			stockList = StockInfoDao.queryIFQty();
-			logger.info("查询有库存的商品成功！"); 
+			logger.info("查询有库存的商品成功：{}", stockList.toString()); 
 			return stockList;
-			
 		} catch (SQLException e) {
 			ExceptionHandle.handle(e);
 		}

@@ -61,7 +61,7 @@ public class TransCoreService2 implements ITransService {
 		Object rspServiceInstance = rspServiceParam.newInstance();
 		// 2.1,通过同名复制，将传入的reqBody赋值到业务类的请求参数上
 		BeanCoperUtils.copyProperties(reqServiceBody, reqServiceInstance);
-
+		
 		// 3,提前封装请求体对象和返回体对象
 		TransReqContext<Object> transReqContext = new TransReqContext<>(transCode, reqServiceInstance);
 		TransRspContext<Object> transRspContext = new TransRspContext<>(rspServiceInstance);
@@ -88,11 +88,13 @@ public class TransCoreService2 implements ITransService {
 		Map<Integer, ArrayList> genericInterfaceType = ReflectParseUtils.getGenericInterfaceType(service.getClass());
 		ArrayList<Class> genericType = genericInterfaceType.get(0);
 		Class reqServiceParam = genericType.get(0), rspServiceBody = genericType.get(1);
+		
 		// 2.1，从map中获取请求头，请求体
 		Map<String, Object> reqServcieMap = (Map<String, Object>) map.get(REQ_SERVICE);
 		Map<String, Object> reqHeaderMap = (Map<String, Object>) reqServcieMap.get(REQ_HEADER_NODE);
 		Map<String, Object> reqBodyMap = (Map<String, Object>) reqServcieMap.get(REQ_BODY_NODE);
 		
+		LOG.info("---" + reqServiceParam.toString());
 		// 2.2，将请求体map --> 请求体对象javabean
 		Object reqServiceBody = ReflectParseUtils.mapToObject(reqBodyMap, reqServiceParam);
 
@@ -147,7 +149,7 @@ public class TransCoreService2 implements ITransService {
 			System.out.println("code:" + code);
 
 			// 1，报文准备
-			String fileToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR01</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body><test>1</test></body></reqService>";
+			String fileToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR01</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body><qty>100</qty></body></reqService>";
 
 			int length = fileToString.getBytes("utf8").length; // 字节长度
 			String lengthStr = String.format("%6d", length).replace(" ", "0");
@@ -161,8 +163,11 @@ public class TransCoreService2 implements ITransService {
 			Map<String, Object> readAssignMsg2Map = parseXmlMessage.streamToMap(byteArrayInputStream);
 			System.out.println("报文已经解析为map对象：" + readAssignMsg2Map.toString());
 			String transCode = parseXmlMessage.getTransCode(readAssignMsg2Map);
+			
+			//Object handBussiness = new TransCoreService().handlerBussiness(transCode, readAssignMsg2Map);
 			Object handBussiness = new TransCoreService2().handlerBussiness(transCode, readAssignMsg2Map);
-
+			System.out.println("获取对象为:" + handBussiness.toString());
+			
 			String objectToXml = ReflectParseUtils.objectToXml(handBussiness);
 			byte[] doOutputProcess = new ParseXmlMessage().doOutputProcess(objectToXml);
 			System.out.println("交易处理结束:" + objectToXml);

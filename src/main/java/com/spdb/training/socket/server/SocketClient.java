@@ -5,11 +5,12 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.socket.parsemsg.ParseXmlMessage;
-import com.spdb.training.socket.xml.ReflectParseUtils;
+import com.spdb.training.threadpool.ThreadPoolFactory;
 
 public class SocketClient {
 
@@ -17,6 +18,7 @@ public class SocketClient {
 	private final static String CHARSET_UTF8 = "utf8";
 	private final static String SERVER_IP = "127.0.0.1";
 	private final static int SERVER_PORT = 8084;
+	private static ExecutorService threadPool = ThreadPoolFactory.getThreadPool(10,90,100,"handlerSocketPool");
 	
 	public String start(String request, String host, int port) {
 
@@ -55,13 +57,25 @@ public class SocketClient {
 	}
 	public static void main(String[] args) {
 		
+		//Socket报文交易方式
+		//main采用的Dao->Service.相关包->Service里面相关TranService->Service.TransServiceFactory->TransCoreService2
+		//里(String transCode, Object reqServiceBody, Object rspServiceBody)
+		
+		//方式1：Dao->Service.相关包->Service相关里面TranService->Service里面TransServiceFactory->TransCoreService2的handlerBussiness(tranCode,map)
+		//	         参考TransCoreService2的main(需要Rsp如or01里面XML配置,TransCoreService2里面main)
+		
+		//方式2：Dao->Service.相关包->socket.service.config里面InitTransService->or01->socket.service.TransCoreService里面handlerBussiness参考
+		//     (ParseXmlMessage里面main,TransCoreService里面main)
+		
 		FileWriter fileWriter = null;
 		
 		try {
+			Long star = System.currentTimeMillis();
 			// 1,从本地的请求xml文件中获取请求信息
-//			String xmlPathname = "D:\\test\\UserRegisterReq.xml";
-			String xmlPathname = "src/main/resources/UserRegisterReq.xml";
-			String xmlToString = ReflectParseUtils.xmlToString(xmlPathname);
+			//String xmlPathname = "";
+			for (int i = 0; i < 10; i++) {
+			String xmlToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR02</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body></body></reqService>";
+			//String xmlToString = ReflectParseUtils.xmlToString(xmlPathname);
 			LOG.debug("xml:{}",xmlToString);
 			// 2,按照6位长度+报文 规范生成新的请求报文
 			int srcLength = xmlToString.getBytes("utf8").length;
@@ -70,16 +84,19 @@ public class SocketClient {
 			// 3,拿到返回的应答报文
 			String rspXmlString = new SocketClient().start(newxml,SERVER_IP,SERVER_PORT);
 			// 4,将应答报文写入本地盘中的UserRegisterRsp.xml
-			String rspXmlPath = "D:\\test\\UserRegisterRsp.xml";
-			File file = new File(rspXmlPath);
-			if (!file.exists()) {
-				file.createNewFile();
+//			String rspXmlPath = "f:\\test.xml";
+//			File file = new File(rspXmlPath);
+//			if (!file.exists()) {
+//				file.createNewFile();
+//			}
+//			fileWriter = new FileWriter(file);
+//			fileWriter.write(rspXmlString);
+//			fileWriter.flush();
+//			
+//			Runtime.getRuntime().exec("cmd /c start explorer "+rspXmlPath);
+			Long end = System.currentTimeMillis();
+			System.out.println("执行时间：" + (end-star) + "执行程序:" + i);
 			}
-			fileWriter = new FileWriter(file);
-			fileWriter.write(rspXmlString);
-			fileWriter.flush();
-			
-			Runtime.getRuntime().exec("cmd /c start explorer "+rspXmlPath);
 			
 		} catch (Exception e) {
 			LOG.error("客户端测试主线程抛出异常",e);

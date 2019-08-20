@@ -33,14 +33,56 @@ public class JdbcTemplate extends AbsJdbcTemplate {
 	}
 
 	@Override
-	public <T> List<T> query(String sql, IRowMapper<T> rowMapper) {
+	public <T> List<T> query(String sql, IRowMapper<T> rowMapper) throws SQLException {
 		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<T> results = null;
+		try {
+
+			// 获取连接
+			conn = DbUtils.getConnection(dataSource);
+			// 准备ps
+			ps = createPrepareStatement(conn, sql);
+
+			// 执行ps查询
+			rs = ps.executeQuery();
+			// 提取数据
+			results = extractData(rs, rowMapper);
+		} finally {// 务必要释放数据库相关资源
+
+			DbUtils.closeResultSet(rs);
+			DbUtils.closeStatement(ps);
+			// 连接池的交还给连接池处置
+			DbUtils.releaseConnection(dataSource, conn);
+
+		}
+
+		// 返回查询结果
+		return results;
 	}
 
 	@Override
-	public int update(String sql) {
-		return 0;
+	public int update(String sql) throws SQLException {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		int rowsAffected = 0;
+		try {
+			// 获取连接
+			conn = DbUtils.getConnection(dataSource);
+			// 准备ps
+			ps = createPrepareStatement(conn, sql);
+			// 执行ps
+			rowsAffected = ps.executeUpdate();
+		} finally {
+			// 务必关闭资源
+			DbUtils.closeStatement(ps);
+			// 连接池的交还给连接池处置
+			DbUtils.releaseConnection(dataSource, conn);
+		}
+		// 返回执行结果
+		return rowsAffected;
 
 	}
 
@@ -245,7 +287,6 @@ public class JdbcTemplate extends AbsJdbcTemplate {
 	}
 	
 	
-
 	@Override
 	public Map<String, Object> queryForMap(String sql, Object... args) throws SQLException {
 		List<Map<String, Object>> resultList = query(sql, args);

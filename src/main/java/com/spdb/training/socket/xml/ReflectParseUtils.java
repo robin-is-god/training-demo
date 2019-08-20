@@ -96,7 +96,8 @@ public class ReflectParseUtils {
 		for (int i = 0; i < length; i++) {
 			Node item = childNodes.item(i);
 			// text_node表示元素或者属性中的文本内容
-			if (item.hasChildNodes() && item.getChildNodes().item(0).getNodeType() != Element.TEXT_NODE) {
+			//如果body或者header为空也设置为空，不然报错
+			if ((item.hasChildNodes() && item.getChildNodes().item(0).getNodeType() != Element.TEXT_NODE) || item.getChildNodes().item(0) == null) {
 				hashMap.put(item.getNodeName(), listNodes(item.getChildNodes()));
 			} else {
 				hashMap.put(item.getNodeName(), item.getChildNodes().item(0).getTextContent());
@@ -165,9 +166,9 @@ public class ReflectParseUtils {
 			} else {
 				if (field.getType() == Integer.class) 
 					field.set(newInstance, Integer.valueOf((String) map.get(field.getName()))); // 要用包装类型Integer 
-				if (field.getType() == BigDecimal.class) 
+				else if (field.getType() == BigDecimal.class) 
 					field.set(newInstance, new BigDecimal((String) map.get(field.getName())));
-				if (field.getType() == String.class) 
+				else if (field.getType() == String.class) 
 					field.set(newInstance, map.get(field.getName()));
 			}
 		}

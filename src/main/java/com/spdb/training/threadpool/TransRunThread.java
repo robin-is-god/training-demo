@@ -4,7 +4,6 @@ import java.util.concurrent.Callable;
 
 import com.spdb.training.beans.trans.TransReqContext;
 import com.spdb.training.beans.trans.TransRspContext;
-import com.spdb.training.exception.BusinessException;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.services.ITransServices;

@@ -13,10 +13,10 @@ import com.spdb.training.threadpool.ThreadPoolFactory;
  * 类说明: 服务端应用程序是通过java语言提供的socket类来实现的
  */
 public class SocketServer {
-
+	
 	private final static ILog LOG = LoggerFactory.getLogger(SocketServer.class);
 	/** 创建socketserver服务处理线程池*/
-	private static ExecutorService threadPool = ThreadPoolFactory.getThreadPool(10,50,50,"handlerSocketPool");
+	private static ExecutorService threadPool = ThreadPoolFactory.getThreadPool(10,90,100,"handlerSocketPool");
 	
 	/**
 	 * socket服务端口，类

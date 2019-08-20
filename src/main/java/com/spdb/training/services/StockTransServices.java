@@ -29,7 +29,7 @@ public class StockTransServices implements ITransServices<Stock, StockRsp>{
 		if (stockServiceImpl == null) {
 			stockServiceImpl = new StockServiceImpl();
 		}
-
+		
 		List<Stock> row = stockServiceImpl.queryStockHaveQty();
 		if (row == null || row.isEmpty()) {
 			throw new BusinessException(ResultCodeEnum.TRAINPB0002.getCode(), ResultCodeEnum.TRAINPB0002.getMsg(),
@@ -39,7 +39,19 @@ public class StockTransServices implements ITransServices<Stock, StockRsp>{
 		}
 
 		StockRsp context = rspContext.getContext();
-		context.setNum(row.size());
+		context.setNums(5);
 		context.setRow(row);
+	}
+	
+	public static void main(String[] args) {
+		StockServiceImpl serviceImpl = new StockServiceImpl();
+		
+		List<Stock> row = serviceImpl.queryStockHaveQty();
+		if (row == null || row.isEmpty()) {
+			throw new BusinessException(ResultCodeEnum.TRAINPB0002.getCode(), ResultCodeEnum.TRAINPB0002.getMsg(),
+					"");
+		} else {
+			System.out.println("所有有库存商品查询信息:{}" +  row.toString());
+		}
 	}
 }

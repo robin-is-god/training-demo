@@ -13,20 +13,20 @@ import com.spdb.training.beans.stock.Stock;
 * @version time：2019年6月19日 上午10:20:56 
 *   类说明:
 */
-@XmlType(propOrder= {"tranCode","row"})
+@XmlType(propOrder= {"nums","row"})
 public class RspOR01ServiceBody {
 
-	@XmlElement(name="tranCode")
-	private String tranCode;
+	@XmlElement(name="nums")
+	private int nums;
 	@XmlElement(name="row")
 	private List<Stock> row;
 	
 	@XmlTransient
-	public String getTranCode() {
-		return tranCode;
+	public int getNums() {
+		return nums;
 	}
-	public void setTranCode(String tranCode) {
-		this.tranCode = tranCode;
+	public void setNums(int nums) {
+		this.nums = nums;
 	}
 	@XmlTransient
 	public List<Stock> getRow() {

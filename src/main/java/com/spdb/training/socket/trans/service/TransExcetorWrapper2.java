@@ -20,7 +20,7 @@ public class TransExcetorWrapper2 {
 	
 	private final static ILog LOG = LoggerFactory.getLogger(TransExcetorWrapper2.class);
 	/**创建交易执行线程池*/
-	private static ExecutorService threadPool = ThreadPoolFactory.getThreadPool(10,50,50,"handlerTransPool");
+	private static ExecutorService threadPool = ThreadPoolFactory.getThreadPool(10,90,100,"handlerTransPool");
 
 	/**
 	 * 交易处理器
@@ -46,7 +46,7 @@ public class TransExcetorWrapper2 {
 		TransRunThread transRunThread = new TransRunThread(transReqContext, transRspContext);
 		Future<ThreadRunResult> submit = threadPool.submit(transRunThread);
 		submit.get();
-		// 判断业务逻辑中是否抛出过异常；如果有异常，从请求头里面获取异常信息
+		// 判断业务逻辑中是否抛出过异常,如果有异常,从请求头里面获取异常信息
 		if (transReqContext.isException()) {
 			if (transReqContext.getException() instanceof RuntimeException) {
 				throw (RuntimeException)transReqContext.getException();

@@ -31,8 +31,9 @@ public interface ICommonJdbcOperations {
 	 * 
 	 * @param sql
 	 * @return
+	 * @throws SQLException 
 	 */
-	int update(String sql);
+	int update(String sql) throws SQLException;
 
 	/**
 	 * 使用statement批量执行sql语句

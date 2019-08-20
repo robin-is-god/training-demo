@@ -61,12 +61,7 @@ public class ParseXmlMessage extends AbsParseMessage {
 	 */
 	@Override
 	public Object executeTrans(String transCode, Map<String, Object> map) throws Exception {
-		//Socket报文交易两种方式
-		//方式1：Dao->Service.相关包->Service相关里面TranService->Service里面TransServiceFactory->socket.trans里面TransCoreService2的handlerBussiness
-		//方式2：Dao->Service.相关包->socket.service.config里面InitTransService->socket.service.TransCoreService里面handlerBussiness
 		
-		
-		// 这里选取方式一
 		//1,根据交易码，将map转换成相应的接口对象
 		Object[] mapToObjectByTransCode = mapToObjectByTransCode(transCode, map);
 		Object reqServiceObject = mapToObjectByTransCode[0], rspServiceObject = mapToObjectByTransCode[1];		
@@ -110,8 +105,8 @@ public class ParseXmlMessage extends AbsParseMessage {
 		return rspServiceObject;
 		
 		
-		//方式2
-		//return TransCoreService.handlerBussiness(code,map);
+		//等效替换
+		//return TransCoreService.getSingleInstance().handlerBussiness(transCode, map);
 	}
 
 	/**
@@ -153,7 +148,7 @@ public class ParseXmlMessage extends AbsParseMessage {
 
 		try {
 			// 1，报文准备
-			String fileToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR01</tranCode><transDate>20190619</transDate><sysId>0515</sysId><addr>ss</addr></reqHeader><body><globalSeq>23</globalSeq><transSeq>233</transSeq><transDate>20190619</transDate><name>zs</name><age>19</age><telNo>32</telNo></body></reqService>";
+			String fileToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR01</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body></body></reqService>";
 			int length = fileToString.getBytes("utf8").length; // 字节长度
 			String lengthStr = String.format("%6d", length).replace(" ", "0");
 			String newfileToString = lengthStr + fileToString;
@@ -174,8 +169,13 @@ public class ParseXmlMessage extends AbsParseMessage {
 			TransCoreService xmlSocketTransService = new TransCoreService();
 			ArrayList<Class> genericType = ReflectParseUtils.getGenericExtendsType(transTS01Service.getClass());
 			ReflectParseUtils.mapToObject(readAssignMsg2Map, genericType.get(0));
-
-			xmlSocketTransService.handlerBussiness("OR01", (Map<String, Object>) readAssignMsg2Map.get("reqService"));
+			LOG.info("test:"+readAssignMsg2Map.toString());
+			//Object handBussiness = xmlSocketTransService.handlerBussiness("OR01", (Map<String, Object>) readAssignMsg2Map.get("reqService"));
+			Object handBussiness = xmlSocketTransService.handlerBussiness("OR01", readAssignMsg2Map);
+			
+			String objectToXml = ReflectParseUtils.objectToXml(handBussiness);
+			byte[] doOutputProcess = new ParseXmlMessage().doOutputProcess(objectToXml);
+			System.out.println("交易处理结束:"+objectToXml);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -46,7 +46,7 @@ public class TransServicesFactory {
 		if(TransCodeEnum.OR01.getTransCode().equals(transCode)){
 			return new StockTransServices();
 		} else if (TransCodeEnum.OR02.getTransCode().equals(transCode)) {
-			//return new OrderTransServices();
+			return new OrderTransService();
 		}
 		return null;
 	}

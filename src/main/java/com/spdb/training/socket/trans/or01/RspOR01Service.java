@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import com.spdb.training.socket.trans.entity.RspServiceHeader;
-import com.spdb.training.socket.trans.or02.RspOR02ServiceBody;
 
 /** 
 * @author 作者: 王腾蛟
