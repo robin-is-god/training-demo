@@ -17,7 +17,7 @@ import com.spdb.training.log.LoggerFactory;
 */
 
 public class OrderServiceImpl implements OrderService {
-	private static ILog logger = LoggerFactory.getLogger(OrderService.class);
+	private static ILog logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
 	@Override
 	public boolean insert(Order order) {

@@ -28,6 +28,8 @@ public class OrderTransService implements ITransServices<Order, OrderRsp>{
 		}
 		
 		Order context = reqContext.getContext();
+		
+		orderServiceImpl.insert(context);
 		log.info(context.toString());
 	}
 	

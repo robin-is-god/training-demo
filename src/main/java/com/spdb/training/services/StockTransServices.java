@@ -39,7 +39,7 @@ public class StockTransServices implements ITransServices<Stock, StockRsp>{
 		}
 
 		StockRsp context = rspContext.getContext();
-		context.setNums(5);
+		context.setNums(row.size());
 		context.setRow(row);
 	}
 	

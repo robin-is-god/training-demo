@@ -35,9 +35,9 @@ public class OrderInfoDao {
 	 * @throws SQLException
 	 */
 	public static int insert(Order orderInfo) throws SQLException {
-		String sql = "insert into  bigtraining.order(order_id ,Item_code,order_qty,order_date,order_time,order_user)"
-				+ "values(?,?,?,?,?,?)";
-		Object[] args = { orderInfo.getOrderId(), orderInfo.getItemCode(), orderInfo.getQty(), orderInfo.getOrderDate(),
+		String sql = "insert into  bigtraining.order(item_code,order_qty,order_date,order_time,order_user)"
+				+ "values(?,?,?,?,?)";
+		Object[] args = { orderInfo.getItemCode(), orderInfo.getQty(), orderInfo.getOrderDate(),
 				orderInfo.getOrderTime(), orderInfo.getOrderUser() };
 		return jdbcTemplate.update(sql, args);
 	}

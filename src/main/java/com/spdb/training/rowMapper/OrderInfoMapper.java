@@ -25,7 +25,7 @@ public class OrderInfoMapper implements IRowMapper<Order> {
 
 		Order orderInfo = new Order();
 		if (resultMap.containsKey("order_id"))
-			orderInfo.setOrderId(rs.getString("order_id"));
+			orderInfo.setOrderId(rs.getInt("order_id"));
 		
 		if (resultMap.containsKey("item_code"))
 			orderInfo.setItemCode(rs.getString("item_code"));
