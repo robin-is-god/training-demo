@@ -158,7 +158,7 @@ public class JdbcTemplate extends AbsJdbcTemplate {
 		// 返回查询结果
 		return results;
 	}
-
+	
 	@Override
 	public int update(String sql, Object... args) throws SQLException {
 		// 变量初始化
@@ -290,6 +290,13 @@ public class JdbcTemplate extends AbsJdbcTemplate {
 	@Override
 	public Map<String, Object> queryForMap(String sql, Object... args) throws SQLException {
 		List<Map<String, Object>> resultList = query(sql, args);
+
+		return resultList != null && resultList.size() > 0 ? resultList.get(0) : null;
+	}
+
+	@Override
+	public Map<String, Object> queryForMap(String sql) throws SQLException {
+		List<Map<String, Object>> resultList = query(sql);
 
 		return resultList != null && resultList.size() > 0 ? resultList.get(0) : null;
 	}

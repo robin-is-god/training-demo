@@ -130,7 +130,7 @@ public class ReflectParseUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public HashMap<String,Object> convertObjectToMap(Object object) throws Exception {
+	public static HashMap<String,Object> convertObjectToMap(Object object) throws Exception {
 		HashMap<String,Object> hashMap = new HashMap<String,Object>();
 		Field[] declaredFields = object.getClass().getDeclaredFields();
 		for (Field field : declaredFields) {

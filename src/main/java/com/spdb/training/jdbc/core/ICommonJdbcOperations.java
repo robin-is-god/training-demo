@@ -1,6 +1,7 @@
 package com.spdb.training.jdbc.core;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,7 +87,15 @@ public interface ICommonJdbcOperations {
 	 * @throws SQLException
 	 */
 	Map<String, Object> queryForMap(String sql, Object... args) throws SQLException;
-
+	
+	/**
+	 * @param sql
+	 * @return
+	 * @throws SQLException
+	 */
+	Map<String, Object> queryForMap(String sql) throws SQLException;
+	
+	
 	/**
 	 * 使用ps进行更新
 	 * 

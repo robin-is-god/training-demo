@@ -3,6 +3,7 @@ package com.spdb.training.socket.trans.service;
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.spdb.training.exception.BusinessException;
@@ -19,6 +20,7 @@ import com.spdb.training.socket.trans.or01.service.TransOR01Service;
 import com.spdb.training.socket.trans.service.config.InitTransService;
 import com.spdb.training.socket.utils.DateUtils;
 import com.spdb.training.socket.xml.ReflectParseUtils;
+import com.spdb.training.utils.StringUtils;
 
 /**
  * @author 作者: 王腾蛟
@@ -105,7 +107,6 @@ public class TransCoreService implements ITransService {
 			
 			// 1，报文准备
 			String fileToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR01</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body><test>1</test></body></reqService>";
-			
 			int length = fileToString.getBytes("utf8").length; // 字节长度
 			String lengthStr = String.format("%6d", length).replace(" ", "0");
 			String newfileToString = lengthStr + fileToString;
@@ -116,12 +117,23 @@ public class TransCoreService implements ITransService {
 			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(newfileToString.getBytes("utf8"));
 			ParseXmlMessage parseXmlMessage = new ParseXmlMessage();
 			Map<String, Object> readAssignMsg2Map = parseXmlMessage.streamToMap(byteArrayInputStream);
-			System.out.println("报文已经解析为map对象：" + readAssignMsg2Map.toString());
+			ILOG.info("报文已经解析为map对象：" + readAssignMsg2Map.toString());
 			String transCode = parseXmlMessage.getTransCode(readAssignMsg2Map);
 			Object handBussiness = new TransCoreService().handlerBussiness(transCode, readAssignMsg2Map);
-			System.out.println("获取对象为:" + handBussiness.toString());
 			
 			String objectToXml = ReflectParseUtils.objectToXml(handBussiness);
+			
+			
+			
+			
+			System.out.println("objectXml" + objectToXml);
+//			objectToXml = objectToXml.replaceAll(" ", "");
+//			objectToXml = objectToXml.replaceAll("\r\n", "");
+			String rgex = "<itemCode>(.*?)</itemCode>";
+			List<String> list = StringUtils.getStringXmlBody(objectToXml, rgex);
+			System.out.println("list的toString():" + list.toString());
+			
+			
 			byte[] doOutputProcess = new ParseXmlMessage().doOutputProcess(objectToXml);
 			System.out.println("交易处理结束:"+objectToXml);
 			

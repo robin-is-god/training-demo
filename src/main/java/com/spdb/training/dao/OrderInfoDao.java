@@ -5,13 +5,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.spdb.training.beans.order.Order;
-import com.spdb.training.beans.stock.Stock;
 import com.spdb.training.jdbc.core.JdbcTemplate;
 import com.spdb.training.jdbc.core.JdbcTemplateFactory;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.rowMapper.OrderInfoMapper;
-import com.spdb.training.rowMapper.StockInfoMapper;
 
 /**
  * 
@@ -37,7 +35,7 @@ public class OrderInfoDao {
 	public static int insert(Order orderInfo) throws SQLException {
 		String sql = "insert into  bigtraining.order(item_code,order_qty,order_date,order_time,order_user)"
 				+ "values(?,?,?,?,?)";
-		Object[] args = { orderInfo.getItemCode(), orderInfo.getQty(), orderInfo.getOrderDate(),
+		Object[] args = { orderInfo.getOrderCode(), orderInfo.getOrderNum(), orderInfo.getOrderDate(),
 				orderInfo.getOrderTime(), orderInfo.getOrderUser() };
 		return jdbcTemplate.update(sql, args);
 	}
@@ -63,4 +61,5 @@ public class OrderInfoDao {
 		return jdbcTemplate.query(sql, new OrderInfoMapper());
 
 	}
+	
 }

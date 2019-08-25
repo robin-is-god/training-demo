@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
-
 import com.spdb.training.exception.BusinessException;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
@@ -142,7 +141,18 @@ public class ParseXmlMessage extends AbsParseMessage {
 		Map<String, Object> reqHeaderMap = (Map<String, Object>) reqServiceMap.get(XML_HEADER_NODE);
 		return (String) reqHeaderMap.get(XML_HEADER_TRANCODE);
 	}
-
+	
+	/**
+	 * 获取row
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getStockRow(Map<String, Object> map) {
+		Map<String, Object> reqServiceMap = (Map<String, Object>) map.get(XML_ROOT_NODE);
+		Map<String, Object> reqBodyMap = (Map<String, Object>) reqServiceMap.get(XML_BODY_NODE);
+		return (Map<String, Object>) reqBodyMap.get(XML_BODY_ROW);
+	}
+	
 	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
 	public static void main(String[] args) {
 
@@ -169,7 +179,6 @@ public class ParseXmlMessage extends AbsParseMessage {
 			TransCoreService xmlSocketTransService = new TransCoreService();
 			ArrayList<Class> genericType = ReflectParseUtils.getGenericExtendsType(transTS01Service.getClass());
 			ReflectParseUtils.mapToObject(readAssignMsg2Map, genericType.get(0));
-			LOG.info("test:"+readAssignMsg2Map.toString());
 			//Object handBussiness = xmlSocketTransService.handlerBussiness("OR01", (Map<String, Object>) readAssignMsg2Map.get("reqService"));
 			Object handBussiness = xmlSocketTransService.handlerBussiness("OR01", readAssignMsg2Map);
 			
@@ -182,4 +191,5 @@ public class ParseXmlMessage extends AbsParseMessage {
 			e.printStackTrace();
 		}
 	}
+
 }

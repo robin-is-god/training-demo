@@ -1,15 +1,12 @@
 package com.spdb.training.socket.trans.or01.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.spdb.training.beans.stock.Stock;
-import com.spdb.training.beans.stock.StockRsp;
 import com.spdb.training.exception.BusinessException;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.services.ResultCodeEnum;
-import com.spdb.training.services.StockTransServices;
 import com.spdb.training.services.stock.StockServiceImpl;
 import com.spdb.training.socket.trans.anno.TransCodeAnno;
 import com.spdb.training.socket.trans.entity.TransReqContext;
@@ -50,9 +47,8 @@ public class TransOR01Service extends AbsAtomicTransService<ReqOR01Service, RspO
 		} else {
 			log.info("所有有库存商品查询信息:{}", row.toString());
 		}
-
 		body.setRow(row);
-		body.setNums(row.size());
+		body.setNums(10);
 		rspContext.getContext().setBody(body);
 	}
 

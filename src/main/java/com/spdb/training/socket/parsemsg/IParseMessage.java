@@ -17,6 +17,8 @@ public interface IParseMessage {
 	static final String XML_ROOT_NODE = "reqService"; // xml中的root根节点
 	static final String XML_HEADER_NODE = "reqHeader"; // xml中的请求头节点
 	static final String XML_HEADER_TRANCODE = "tranCode"; // xml中的请求头中的交易码标签
+	static final String XML_BODY_NODE = "body";			  //xml中body
+	static final String XML_BODY_ROW = "row";			  //xml中row
 	
 	/**
 	 * 请求报文解析 -- 交易处理 -- 报文返回
@@ -32,4 +34,11 @@ public interface IParseMessage {
 	 * @return 
 	 */
 	String getTransCode(Map<String, Object> map);
+	
+	/**
+	 * 获取Xml中row
+	 * @param map
+	 * @return
+	 */
+	Map<String, Object> getStockRow(Map<String, Object> map);
 }

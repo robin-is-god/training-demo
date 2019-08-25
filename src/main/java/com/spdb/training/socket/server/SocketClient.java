@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -12,6 +14,9 @@ import com.spdb.training.beans.stock.Stock;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.socket.parsemsg.ParseXmlMessage;
+import com.spdb.training.socket.trans.or01.RspOR01Service;
+import com.spdb.training.socket.xml.ReflectParseUtils;
+import com.spdb.training.utils.StringUtils;
 
 public class SocketClient {
 
@@ -54,6 +59,14 @@ public class SocketClient {
 			}
 		}
 	}
+	
+	public static List<String> getQtyStockList(String stringXml) {
+		String rgex = "<itemCode>(.*?)</itemCode>";
+		List<String> list = new ArrayList<>();
+		list = StringUtils.getStringXmlBody(stringXml, rgex);
+		return list;
+	}
+	
 	public static void main(String[] args) throws Throwable, Throwable {
 		//Socket报文交易方式
 		//main采用的Dao->Service.相关包->Service里面相关TranService->Service.TransServiceFactory->TransCoreService2
@@ -65,65 +78,56 @@ public class SocketClient {
 		//方式2：Dao->Service.相关包->socket.service.config里面InitTransService->or01->socket.service.TransCoreService里面handlerBussiness参考
 		//     (ParseXmlMessage里面main,TransCoreService里面main)
 		
-		Long star = System.currentTimeMillis();	
-		ArrayList<Stock> list = new ArrayList<>();
-		for(int i = 0; i < 10; i++) {
+		Long start = System.currentTimeMillis();	
+		ExecutorService threads = Executors.newFixedThreadPool(200);
+		
+		List<Stock> list = new ArrayList<>();
+		for (int i =0; i < 10; i++) {
 			Stock stock = new Stock();
 			stock.setItemCode("0001000" + i);
 			stock.setQty(10000);
 			list.add(stock);
 		}
-		ExecutorService threads = Executors.newFixedThreadPool(200);
-		for(int i = 0; i < 50000; i++) {
-		Future<String> task = threads.submit(new ClientThread(list));
-		String newXml= task.get();
-		String rspXmlString = new SocketClient().start(newXml,SERVER_IP,SERVER_PORT);
+		
+		for(int i = 0; i < 98000; i++) {
+			Future<String> task = threads.submit(new ClientThread(list));
 		}
+		
+		while (true) {
+			try {
+				SocketClient socketClient = new SocketClient();
+				String stockReqXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR01</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body></body></reqService>";
+				int srcLength = stockReqXml.getBytes("utf8").length;
+				String newStockReqxml = String.format("%6d", srcLength).replace(" ", "0") + stockReqXml;
+				//商品查询响应xml
+				String stockRspXml = socketClient.start(newStockReqxml, SERVER_IP, SERVER_PORT);
+				// 解析服务端返回的查询库存报文
+				Thread.sleep(20);
+				RspOR01Service rspOR01Service = ReflectParseUtils.XmlToJava(stockRspXml, RspOR01Service.class);
+				int nums = rspOR01Service.getBody().getNums();
+				// 如果nums为0，表示没有库存，结束
+				if (nums == 0) {
+					LOG.debug("所有商品均无库存，秒杀活动结束！");
+					Long end = System.currentTimeMillis();
+					LOG.info("执行时间：{}ms", (end-start));
+					break;
+				} else {
+					// 根据有库存的商品，随机购买、
+					List<Stock> row = rspOR01Service.getBody().getRow();
+					Random random = new Random();
+					int i = random.nextInt(row.size());
+					Future<String> task = threads.submit(new ClientThread2(row.get(i)));
+				}
+			} catch (Exception e) {
+				LOG.error("异常退出:{}", e);
+				break;
+			}
+		}
+		
 		threads.shutdown();
 		
-		System.out.println("12345" + list.toString());
 		Long end = System.currentTimeMillis();
-		System.out.println("执行时间：" + (end-star) + "执行程序:" );
+		LOG.info("执行时间：{}ms", (end-start));
 		
-//		FileWriter fileWriter = null;
-//		
-//		try {
-//			Long star = System.currentTimeMillis();
-//			// 1,从本地的请求xml文件中获取请求信息
-//			//String xmlPathname = "";
-//			for (int i = 0; i < 10; i++) {
-//			String xmlToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR02</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body></body></reqService>";
-//			//String xmlToString = ReflectParseUtils.xmlToString(xmlPathname);
-//			LOG.debug("xml:{}",xmlToString);
-//			// 2,按照6位长度+报文 规范生成新的请求报文
-//			int srcLength = xmlToString.getBytes("utf8").length;
-//			String newxml = String.format("%6d", srcLength).replace(" ", "0") + xmlToString;
-//			LOG.debug("newxml:{}",newxml);
-//			// 3,拿到返回的应答报文
-//			String rspXmlString = new SocketClient().start(newxml,SERVER_IP,SERVER_PORT);
-//			// 4,将应答报文写入本地盘中的UserRegisterRsp.xml
-////			String rspXmlPath = "f:\\test.xml";
-////			File file = new File(rspXmlPath);
-////			if (!file.exists()) {
-////				file.createNewFile();
-////			}
-////			fileWriter = new FileWriter(file);
-////			fileWriter.write(rspXmlString);
-////			fileWriter.flush();
-////			
-////			Runtime.getRuntime().exec("cmd /c start explorer "+rspXmlPath);
-//			Long end = System.currentTimeMillis();
-//			System.out.println("执行时间：" + (end-star) + "执行程序:" + i);
-//			}
-//			
-//		} catch (Exception e) {
-//			LOG.error("客户端测试主线程抛出异常",e);
-//		} finally {
-//			try {
-//				if (fileWriter!=null) fileWriter.close();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
 }

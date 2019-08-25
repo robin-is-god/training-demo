@@ -23,7 +23,7 @@ public class TransReqContext<T> implements Serializable{
 	 */
 	private String transCode;
 	
-	private Map<String, Object> map = new HashMap<String, Object>();
+	private HashMap<String, Object> map = new HashMap<String, Object>();
 	
 	public TransReqContext(String transCode,T context){
 		this.transCode = transCode;
@@ -58,11 +58,11 @@ public class TransReqContext<T> implements Serializable{
 		this.transCode = transCode;
 	}
 
-	public Map<String, Object> getMap() {
+	public HashMap<String, Object> getMap() {
 		return map;
 	}
 
-	public void setMap(Map<String, Object> map) {
+	public void setMap(HashMap<String, Object> map) {
 		this.map = map;
 	}
 

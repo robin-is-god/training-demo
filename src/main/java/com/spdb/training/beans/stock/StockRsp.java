@@ -1,11 +1,9 @@
 package com.spdb.training.beans.stock;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import java.util.Map;
 
 /**
 * @ClassName: StockRsp
@@ -28,7 +26,7 @@ public class StockRsp implements Serializable {
 	public void setNums(int nums) {
 		this.nums = nums;
 	}
-	
+
 	public List<Stock> getRow() {
 		return row;
 	}
@@ -36,4 +34,5 @@ public class StockRsp implements Serializable {
 	public void setRow(List<Stock> row) {
 		this.row = row;
 	}
+	
 }

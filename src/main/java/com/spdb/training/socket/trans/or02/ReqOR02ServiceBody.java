@@ -9,28 +9,28 @@ import javax.xml.bind.annotation.XmlType;
 * @version time：2019年6月19日 上午10:20:56 
 *   类说明:
 */
-@XmlType(propOrder= {"itemId", "qty", "orderUser"})
+@XmlType(propOrder= {"orderCode", "orderNum", "orderUser"})
 public class ReqOR02ServiceBody {
-	@XmlElement(name="itemId")
-	private String itemId;
-	@XmlElement(name="qty")
-	private int qty;
+	@XmlElement(name="orderCode")
+	private String orderCode;
+	@XmlElement(name="orderNum")
+	private Integer orderNum;
 	@XmlElement(name="orderUser")
 	private String orderUser;
 	
 	@XmlTransient
-	public String getItemId() {
-		return itemId;
+	public String getOrderCode() {
+		return orderCode;
 	}
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
 	}
 	@XmlTransient
-	public int getQty() {
-		return qty;
+	public Integer getOrderNum() {
+		return orderNum;
 	}
-	public void setQty(int qty) {
-		this.qty = qty;
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
 	}
 	@XmlTransient
 	public String getOrderUser() {
@@ -39,4 +39,5 @@ public class ReqOR02ServiceBody {
 	public void setOrderUser(String orderUser) {
 		this.orderUser = orderUser;
 	}
+	
 }

@@ -1,7 +1,9 @@
 package com.spdb.training.services.stock;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.spdb.training.beans.stock.Stock;
 import com.spdb.training.dao.StockInfoDao;
@@ -35,15 +37,15 @@ public class StockServiceImpl implements StockService{
 
 	@Override
 	public List<Stock> queryStockHaveQty() {
-		List<Stock> stockList = null;
+		List<Stock> list = null;
 		try {
-			stockList = StockInfoDao.queryIFQty();
-			logger.info("查询有库存的商品成功：{}", stockList.toString()); 
-			return stockList;
+			list = StockInfoDao.queryIFQty();
+			logger.info("查询有库存的商品成功：{}", list.toString()); 
+			return list;
 		} catch (SQLException e) {
 			ExceptionHandle.handle(e);
 		}
-		return stockList; 
+		return list; 
 	}
 	/**
 	 * @疑问：对返回值：boolean的意义不太确定是什么。

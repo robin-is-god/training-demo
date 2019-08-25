@@ -1,8 +1,10 @@
 package com.spdb.training.socket.server;
 
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
+
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.threadpool.ThreadPoolFactory;
@@ -16,8 +18,7 @@ public class SocketServer {
 	
 	private final static ILog LOG = LoggerFactory.getLogger(SocketServer.class);
 	/** 创建socketserver服务处理线程池*/
-	private static ExecutorService threadPool = ThreadPoolFactory.getThreadPool(10,90,100,"handlerSocketPool");
-	
+	private static ExecutorService threadPool = ThreadPoolFactory.getThreadPool(50,90,100,"handlerSocketPool");
 	/**
 	 * socket服务端口，类
 	 * @param port
@@ -30,13 +31,15 @@ public class SocketServer {
 
 		try {
 			// 1,创建端口建立连接
-			serverSocket = new ServerSocket(port); 
+			serverSocket = new ServerSocket(); 
+			serverSocket.setReuseAddress(true);
+			serverSocket.bind(new InetSocketAddress(port)); 
 			LOG.debug("Socket服务端已经启动，绑定地址：{},监听端口:{}", serverSocket.getInetAddress(), serverSocket.getLocalPort());
 			// 2,循环监听程序，以监视连接请求
 			while (true) { 
 				try {
 					client = serverSocket.accept(); // 监听端口请求，等待连接；获取与socket连接的数据流对象(阻塞特性)
-					client.setSoTimeout(3000);
+					client.setSoTimeout(500);
 					LOG.debug("Socket客户端已经请求连接过来，地址:{},端口:{}", client.getInetAddress(), client.getLocalPort());
 					HandlerSocketService socketServerService = new HandlerSocketService(client);
 					threadPool.execute(socketServerService);

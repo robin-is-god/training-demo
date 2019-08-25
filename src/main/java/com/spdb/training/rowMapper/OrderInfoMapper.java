@@ -28,10 +28,10 @@ public class OrderInfoMapper implements IRowMapper<Order> {
 			orderInfo.setOrderId(rs.getInt("order_id"));
 		
 		if (resultMap.containsKey("item_code"))
-			orderInfo.setItemCode(rs.getString("item_code"));
+			orderInfo.setOrderCode(rs.getString("item_code"));
 		
 		if (resultMap.containsKey("order_qty"))
-			orderInfo.setQty(rs.getInt("order_qty"));
+			orderInfo.setOrderNum(rs.getInt("order_qty"));
 		
 		if (resultMap.containsKey("order_date"))
 			orderInfo.setOrderDate(rs.getString("order_date"));

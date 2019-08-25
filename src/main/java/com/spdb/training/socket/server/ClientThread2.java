@@ -11,21 +11,22 @@ import com.spdb.training.log.LoggerFactory;
 import com.spdb.training.utils.StringUtils;
 
 /**
-* @ClassName: ClientThread
+* @ClassName: ClientThread2
 * @Description: TODO:
 * @author Robin
-* @date 2019年8月21日
+* @date 2019年8月25日
 *
 */
 
-public class ClientThread implements Callable<String>{
+public class ClientThread2 implements Callable<String>{
 	private final static ILog LOG = LoggerFactory.getLogger(ClientThread.class);
 	private final static String CHARSET_UTF8 = "utf8";
 	private final static String SERVER_IP = "127.0.0.1";
 	private final static int SERVER_PORT = 8084;
-	private List<Stock> list;
-	public ClientThread(List<Stock> list) {
-		this.list = list;
+	private Stock stock = null;
+	
+	public ClientThread2(Stock stock) {
+		this.stock = stock;
 	}
 	
 	public static List<String> getQtyStockList(String stringXml) {
@@ -35,11 +36,10 @@ public class ClientThread implements Callable<String>{
 		return list;
 	}
 	
+	
 	@Override
 	public String call() throws Exception {
-		Random random = new Random();
-		int i = random.nextInt(list.size());
-		String orderXmlToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR02</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body><orderCode>" + this.list.get(i).getItemCode() + "</orderCode><orderNum>1</orderNum><orderUser>" + Thread.currentThread().getName() + "</orderUser></body></reqService>";
+		String orderXmlToString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reqService><reqHeader><tranCode>OR02</tranCode><transDate>20190619</transDate><transTime>131452</transTime></reqHeader><body><orderCode>" + this.stock.getItemCode() + "</orderCode><orderNum>1</orderNum><orderUser>" + Thread.currentThread().getName() + "</orderUser></body></reqService>";
 		int orderXmlLength = orderXmlToString.getBytes("utf8").length;
 		String newRrderXml = String.format("%6d", orderXmlLength).replace(" ", "0") + orderXmlToString;
 		String rspXmlString = new SocketClient().start(newRrderXml,SERVER_IP,SERVER_PORT);

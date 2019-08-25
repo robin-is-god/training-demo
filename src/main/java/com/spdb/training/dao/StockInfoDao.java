@@ -3,12 +3,14 @@ package com.spdb.training.dao;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.spdb.training.beans.stock.Stock;
 import com.spdb.training.jdbc.core.JdbcTemplate;
 import com.spdb.training.jdbc.core.JdbcTemplateFactory;
 import com.spdb.training.log.ILog;
 import com.spdb.training.log.LoggerFactory;
+import com.spdb.training.rowMapper.OrderInfoMapper;
 import com.spdb.training.rowMapper.StockInfoMapper;
 
 /**
@@ -87,5 +89,16 @@ public class StockInfoDao {
 	public static List<Stock> queryIFQty() throws SQLException {
 		String sql = "select item_code, qty from  bigtraining.stock where qty > 0 "; 
 		return jdbcTemplate.query(sql, new StockInfoMapper());
+	}
+	
+	/**
+	 * 查询商品库存量
+	 * @param itemCode
+	 * @return
+	 * @throws SQLException
+	 */
+	public static Stock queryQtyByItemCode(String itemCode) throws SQLException {
+		String sql = "select *  from  bigtraining.order where item_code = ?";
+		return jdbcTemplate.queryForObj(sql, new StockInfoMapper(), itemCode);
 	}
 }
